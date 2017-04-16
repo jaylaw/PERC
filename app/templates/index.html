@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}PERC | Home{% endblock %}
+{% block page_content %}
+<div class='page-header'>
+    <h1>PMEL Environment Reports Console</h1>
+</div>
+<p>Logged in user: {% if name %}{{ name }}{% else %}Unknown{% endif %}</p>
+{{ wtf.quick_form(form) }}
+<p>Local date and time: {{ moment(current_time).format('LLL') }}.</p>
+<p>That was {{ moment(current_time).fromNow(refresh=True) }}.</p>
+{% endblock %}
