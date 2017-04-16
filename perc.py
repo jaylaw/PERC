@@ -6,7 +6,7 @@ from flask_script import Manager, Shell
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField, BooleanField
+from wtforms import StringField, SubmitField, PasswordField, BooleanField, SelectField, DateField
 from wtforms.validators import DataRequired
 from sqlalchemy import BigInteger, Boolean, CheckConstraint, Column, DateTime, Float, ForeignKey, Integer, SmallInteger, \
     String, Text, UniqueConstraint
@@ -196,6 +196,22 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Submit')
 
 
+class CriteriaForm(FlaskForm):
+    location = SelectField(label='Location', coerce=int)
+    start_date = DateField('<b>Start Date</b> e.g. 2017-03-26',
+                           validators=[DataRequired()])
+    end_date = DateField('<b>End Date</b> e.g. 2017-03-28',
+                         validators=[DataRequired()])
+    submit = SubmitField()
+
+
+def pop_loc(form):
+    locations = db.session.query(Location).all()
+    loc_choices = [loc.location_name for loc in locations]
+    loc_names = list(enumerate(loc_choices))
+    form.location.choices = loc_names
+
+
 def make_shell_context():
     return dict(app=app, db=db, Location=Location, Reading=Reading)
 
@@ -255,10 +271,17 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/report')
+@app.route('/report', methods=['GET', 'POST'])
 @login_required
 def report():
-    return render_template('report.html')
+    form = CriteriaForm()
+    pop_loc(form)
+    if request.method == 'POST' and form.validate():
+        return redirect(url_for('results', symbol=request.form['symbol'],
+                                trend1=request.form['trend1'],
+                                trend2=request.form['trend2']))
+    return render_template('report.html', form=form)
+
 
 if __name__ == '__main__':
     manager.run()
