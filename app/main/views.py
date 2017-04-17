@@ -2,7 +2,7 @@ from datetime import datetime
 from flask import render_template, session, redirect, url_for, request, flash
 from flask_login import login_required, login_user, logout_user
 from . import main
-from .forms import NameForm, LoginForm, CriteriaForm
+from .forms import LoginForm, CriteriaForm
 from .. import db
 from ..models import User
 
@@ -17,20 +17,9 @@ def page_not_found(e):
     return render_template('500.html'), 500
 
 
-@main.route('/', methods=['GET', 'POST'])
+@main.route('/')
 def index():
-    form = NameForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(login_name=form.name.data).first()
-        if user is None:
-            flash('Not Authorized.')
-        else:
-            session['name'] = form.name.data
-        form.name.data = ''
-        return redirect(url_for('main.index'))
-    return render_template('index.html', form=form,
-                           name=session.get('name'),
-                           current_time=datetime.utcnow())
+    return render_template('index.html', current_time=datetime.utcnow())
 
 
 @main.route('/login', methods=['GET', 'POST'])

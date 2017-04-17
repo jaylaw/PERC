@@ -10,7 +10,7 @@
 
 {% if current_user.is_authenticated %}
 	<p>Logged in user: <b>{{ current_user.login_name }}</b></p>
-	<p>Since {{ moment(current_time).fromNow(refresh=True) }}.</p>
+	<p>Logged in since {{ moment(current_time).fromNow(refresh=True) }}.</p>
 {% else %}
 	<p> You are not currently logged in.</p>
 	<a href="{{ url_for('main.login') }}">Please login to continue.</a>
