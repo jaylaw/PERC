@@ -2,12 +2,20 @@
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block title %}PERC | Home{% endblock %}
+
 {% block page_content %}
-<div class='page-header'>
-    <h1>PMEL Environment Reports Console</h1>
-</div>
-<p>Logged in user: {% if name %}{{ name }}{% else %}Unknown{% endif %}</p>
-{{ wtf.quick_form(form) }}
-<p>Local date and time: {{ moment(current_time).format('LLL') }}.</p>
-<p>That was {{ moment(current_time).fromNow(refresh=True) }}.</p>
+	<div class='page-header'>
+	    <h1>PMEL Environment Reports Console</h1>
+	</div>
+
+{% if current_user.is_authenticated %}
+	<p>Logged in user: <b>{{ current_user.login_name }}</b></p>
+	<p>Logged in since {{ moment(current_time).fromNow(refresh=True) }}.</p>
+{% else %}
+	<p> You are not currently logged in.</p>
+	<a href="{{ url_for('main.login') }}">Please login to continue.</a>
+	<p>Local date and time: {{ moment(current_time).format('LLL') }}.</p>
+{% endif %}
+
 {% endblock %}
+
