@@ -21,6 +21,7 @@ class DevelopmentConfig(Config):
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
             'postgresql+psycopg2://postgres@localhost/dev_logware3'
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 class TestingConfig(Config):
     TESTING = True
