@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import os
-from app import create_app, db
-from app.models import Location, Reading
+from perc import create_app, db
+from perc.models import Location, Reading
 from flask_script import Manager, Shell
 from flask_migrate import Migrate, MigrateCommand
 

@@ -1,8 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, BooleanField, SelectField, DateField
 from wtforms.validators import DataRequired
-from .. import db
-from ..models import Location
+from perc import db
+from perc.models import Location
 
 
 class LoginForm(FlaskForm):

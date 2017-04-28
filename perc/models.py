@@ -1,4 +1,4 @@
-from . import db, lm
+from perc import db, lm
 from flask_login import UserMixin
 
 

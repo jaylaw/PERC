@@ -1,10 +1,10 @@
 from datetime import datetime
 from flask import render_template, session, redirect, url_for, request, flash
 from flask_login import login_required, login_user, logout_user
-from . import main
-from .forms import LoginForm, CriteriaForm
-from .. import db
-from ..models import User
+from perc.main import main
+from perc.main.forms import LoginForm, CriteriaForm
+from perc import db
+from perc.models import User
 
 
 @main.errorhandler(404)
