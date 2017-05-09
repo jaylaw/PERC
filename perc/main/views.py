@@ -1,9 +1,8 @@
 from datetime import datetime
-from flask import render_template, session, redirect, url_for, request, flash
+from flask import render_template, redirect, url_for, request, flash
 from flask_login import login_required, login_user, logout_user
 from perc.main import main
 from perc.main.forms import LoginForm, CriteriaForm
-from perc import db
 from perc.models import User
 
 
@@ -31,7 +30,7 @@ def login():
             flash('Not Authorized.')
             return redirect(url_for('main.login', **request.args))
         login_user(user, form.remember_me.data)
-        return redirect(request.args.get('next') or url_for('main.index'))
+        return redirect(request.args.get('next') or url_for('main.dashboard'))
     return render_template('login.html', form=form)
 
 
@@ -40,6 +39,12 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('main.index'))
+
+
+@main.route('/dashboard')
+@login_required
+def dashboard():
+    return render_template('dashboard.html')
 
 
 @main.route('/report', methods=['GET', 'POST'])
