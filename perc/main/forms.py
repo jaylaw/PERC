@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField, BooleanField, SelectField, DateField
+from wtforms import StringField, SubmitField, PasswordField, BooleanField, SelectField, DateField, RadioField
 from wtforms.validators import DataRequired
 from perc import db
 from perc.models import Location
@@ -12,8 +12,12 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Submit')
 
 
-class CriteriaForm(FlaskForm):
+class ReportForm(FlaskForm):
     location = SelectField(label='Location', coerce=int)
+    criteria = SelectField('Specifications',
+                           choices=[('Pass a dictionary with Main lab parameters!!', 'Main Lab'),
+                                    ('Pass a dictionary with Cold Room parameters!!', 'Cold Room'),
+                                    ('Allow user to input custom environment parameters!!', 'Custom')])
     start_date = DateField('<b>Start Date</b> e.g. 2017-03-26',
                            validators=[DataRequired()])
     end_date = DateField('<b>End Date</b> e.g. 2017-03-28',

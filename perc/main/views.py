@@ -2,7 +2,7 @@ from datetime import datetime
 from flask import render_template, redirect, url_for, request, flash
 from flask_login import login_required, login_user, logout_user
 from perc.main import main
-from perc.main.forms import LoginForm, CriteriaForm
+from perc.main.forms import LoginForm, ReportForm
 from perc.models import User
 
 
@@ -50,10 +50,12 @@ def dashboard():
 @main.route('/report', methods=['GET', 'POST'])
 @login_required
 def report():
-    form = CriteriaForm()
+    form = ReportForm()
     form.pop_loc()
     if request.method == 'POST' and form.validate():
-        return redirect(url_for('results', symbol=request.form['symbol'],
-                                trend1=request.form['trend1'],
-                                trend2=request.form['trend2']))
+        location = request.form['location']
+        start_date = request.form['start_date']
+        end_date = request.form['end_date']
+        criteria = request.form['criteria']
+        return ('Location: {}\n Start Date: {}\n End Date: {}\n Specifications: {}'.format(location, start_date, end_date, criteria))
     return render_template('report.html', form=form)
