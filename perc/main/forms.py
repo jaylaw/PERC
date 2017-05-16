@@ -25,9 +25,9 @@ class ReportForm(FlaskForm):
     end_date = DateField('<b>End Date</b> e.g. 2017-03-28',
                          validators=[DataRequired()])
     temperature = DecimalField('Temperature', validators=[DataRequired()], default=73.00)
-    temp_tol = DecimalField('Temperature', validators=[DataRequired()], default=6.00)
-    humidity = DecimalField('Temperature', validators=[DataRequired()], default=50.00)
-    humid_tol = DecimalField('Temperature', validators=[DataRequired()], default=20.00)
+    temp_tol = DecimalField('Temperature Tolerance', validators=[DataRequired()], default=6.00)
+    humidity = DecimalField('Humidity', validators=[DataRequired()], default=50.00)
+    humid_tol = DecimalField('Humidity Tolerance', validators=[DataRequired()], default=20.00)
     submit = SubmitField()
 
     def pop_loc(self):
