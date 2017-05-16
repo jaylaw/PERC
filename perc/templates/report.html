@@ -4,14 +4,22 @@
 {% block title %}PERC | Report{% endblock %}
 
 {% block page_content %}
-    <h1>Protected page</h1>
-    <p>This page can only be viewed by logged in users.</p>
-    <p>You are logged in as <b>{{ current_user.login_name }}</b>.</p>
 
+    {% if current_user.is_authenticated %}
     <h1>Report Criteria</h1>
+    <p>You are logged in as <b>{{ current_user.login_name }}</b>.</p>
     <div class="row">
         <div class="col-md-3">
             {{ wtf.quick_form(form) }}
         </div>
+
     </div>
+    {% else %}
+    <h1>Protected page</h1>
+    <p>This page can only be viewed by logged in users.</p>
+    <p> You are not currently logged in.</p>
+    <p>Local date and time: {{ moment(current_time).format('LLL') }}.</p>
+    {% endif %}
+
+
 {% endblock %}

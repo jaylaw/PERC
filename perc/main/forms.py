@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField, BooleanField, SelectField, DateField, RadioField
+from wtforms import StringField, SubmitField, PasswordField, BooleanField, SelectField, DateField, DecimalField
 from wtforms.validators import DataRequired
 from perc import db
 from perc.models import Location
@@ -14,14 +14,20 @@ class LoginForm(FlaskForm):
 
 class ReportForm(FlaskForm):
     location = SelectField(label='Location', coerce=int)
+    '''
     criteria = SelectField('Specifications',
                            choices=[('Pass a dictionary with Main lab parameters!!', 'Main Lab'),
                                     ('Pass a dictionary with Cold Room parameters!!', 'Cold Room'),
                                     ('Allow user to input custom environment parameters!!', 'Custom')])
+    '''
     start_date = DateField('<b>Start Date</b> e.g. 2017-03-26',
                            validators=[DataRequired()])
     end_date = DateField('<b>End Date</b> e.g. 2017-03-28',
                          validators=[DataRequired()])
+    temperature = DecimalField('Temperature', validators=[DataRequired()], default=73.00)
+    temp_tol = DecimalField('Temperature', validators=[DataRequired()], default=6.00)
+    humidity = DecimalField('Temperature', validators=[DataRequired()], default=50.00)
+    humid_tol = DecimalField('Temperature', validators=[DataRequired()], default=20.00)
     submit = SubmitField()
 
     def pop_loc(self):

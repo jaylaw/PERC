@@ -56,6 +56,18 @@ def report():
         location = request.form['location']
         start_date = request.form['start_date']
         end_date = request.form['end_date']
-        criteria = request.form['criteria']
-        return ('Location: {}\n Start Date: {}\n End Date: {}\n Specifications: {}'.format(location, start_date, end_date, criteria))
+        temperature = request.form['temperature']
+        temp_tol = request.form['temp_tol']
+        humidity = request.form['humidity']
+        humid_tol = request.form['humid_tol']
+
+        return '''
+        Location: {} \n
+        Start Date: {} \n
+        End Date: {} \n
+        Temperature: {} \n
+        Temperature Tolerance: {} \n
+        Humidity: {} \n
+        Humidity Tolerance: {}
+        '''.format(location, start_date, end_date, temperature, temp_tol, humidity, humid_tol)
     return render_template('report.html', form=form)
