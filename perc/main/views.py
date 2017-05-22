@@ -3,7 +3,8 @@ from flask import render_template, redirect, url_for, request, flash
 from flask_login import login_required, login_user, logout_user
 from perc.main import main
 from perc.main.forms import LoginForm, ReportForm
-from perc.models import User
+from perc import db
+from perc.models import User, Location
 
 
 @main.errorhandler(404)
@@ -68,6 +69,8 @@ def report():
         Temperature: {} \n
         Temperature Tolerance: {} \n
         Humidity: {} \n
-        Humidity Tolerance: {}
-        '''.format(location, start_date, end_date, temperature, temp_tol, humidity, humid_tol)
+        Humidity Tolerance: {} \n
+        Location Map: {}
+        '''.format(location, start_date, end_date, temperature, temp_tol, humidity, humid_tol,
+                   [(Location.location_guid, Location.location_name) for loc in db.session.query(Location).all()])
     return render_template('report.html', form=form)
