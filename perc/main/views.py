@@ -65,7 +65,7 @@ def report():
         locations = db.session.query(Location).all()
         loc_choices = [loc.location_guid for loc in locations]
 
-        loc_guid = loc_choices[location]
+        loc_guid = loc_choices[int(location)]
 
 
         return '''
