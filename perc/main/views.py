@@ -4,7 +4,8 @@ from flask_login import login_required, login_user, logout_user
 from perc.main import main
 from perc.main.forms import LoginForm, ReportForm
 from perc import db
-from perc.models import User, Location
+from perc.models import User, Location, Reading
+import pandas as pd
 
 
 @main.errorhandler(404)
@@ -67,6 +68,10 @@ def report():
 
         loc_guid = loc_choices[int(location)]
 
+        report_query = db.session.query(Reading).filter_by(location_guid=loc_guid).\
+            filter(Reading.time_stamp.between(start_date, end_date)).statement
+
+        report_data = pd.read_sql(report_query, db.engine)
 
         return '''
         Location GUID: {} \n
@@ -76,5 +81,6 @@ def report():
         Temperature Tolerance: {} \n
         Humidity: {} \n
         Humidity Tolerance: {} \n
-        '''.format(loc_guid, start_date, end_date, temperature, temp_tol, humidity, humid_tol)
+        Data: {}
+        '''.format(loc_guid, start_date, end_date, temperature, temp_tol, humidity, humid_tol, report_data.to_html())
     return render_template('report.html', form=form)
