@@ -62,15 +62,19 @@ def report():
         humidity = request.form['humidity']
         humid_tol = request.form['humid_tol']
 
+        locations = db.session.query(Location).all()
+        loc_choices = [loc.location_guid for loc in locations]
+
+        loc_guid = loc_choices[location]
+
+
         return '''
-        Location: {} \n
+        Location GUID: {} \n
         Start Date: {} \n
         End Date: {} \n
         Temperature: {} \n
         Temperature Tolerance: {} \n
         Humidity: {} \n
         Humidity Tolerance: {} \n
-        Location Map: {}
-        '''.format(location, start_date, end_date, temperature, temp_tol, humidity, humid_tol,
-                   [(Location.location_guid, Location.location_name) for loc in db.session.query(Location).all()])
+        '''.format(loc_guid, start_date, end_date, temperature, temp_tol, humidity, humid_tol)
     return render_template('report.html', form=form)
