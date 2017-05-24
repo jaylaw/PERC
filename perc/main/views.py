@@ -64,23 +64,37 @@ def report():
         humid_tol = request.form['humid_tol']
 
         locations = db.session.query(Location).all()
-        loc_choices = [loc.location_guid for loc in locations]
+        guids = [loc.location_guid for loc in locations]
+        names = [loc.location_name for loc in locations]
 
-        loc_guid = loc_choices[int(location)]
+        loc_guid = guids[int(location)]
+        loc_name = names[int(location)]
 
-        report_query = db.session.query(Reading).filter_by(location_guid=loc_guid).\
+        report_query = db.session.query(Reading).filter_by(location_guid=loc_guid). \
             filter(Reading.time_stamp.between(start_date, end_date)).statement
 
         report_data = pd.read_sql(report_query, db.engine)
 
-        return '''
-        Location GUID: {} \n
-        Start Date: {} \n
-        End Date: {} \n
-        Temperature: {} \n
-        Temperature Tolerance: {} \n
-        Humidity: {} \n
-        Humidity Tolerance: {} \n
-        Data: {}
-        '''.format(loc_guid, start_date, end_date, temperature, temp_tol, humidity, humid_tol, report_data.to_html())
+        return render_template('summary_report.html',
+                               loc_name=loc_name,
+                               start_date=start_date,
+                               end_date=end_date,
+                               temperature=temperature,
+                               temp_tol=temp_tol,
+                               humidity=humidity,
+                               humid_tol=humid_tol,
+                               report_data=report_data.to_html(),
+                               current_time=datetime.utcnow())
+
+    #         '''
+    #         Location GUID: {} \n
+    #         Start Date: {} \n
+    #         End Date: {} \n
+    #         Temperature: {} \n
+    #         Temperature Tolerance: {} \n
+    #         Humidity: {} \n
+    #         Humidity Tolerance: {} \n
+    #         Data: {}
+    #         '''.format(loc_guid, start_date, end_date, temperature, temp_tol, humidity, humid_tol, report_data.to_html())
+
     return render_template('report.html', form=form)
