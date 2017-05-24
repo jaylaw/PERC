@@ -86,15 +86,4 @@ def report():
                                report_data=report_data.to_html(),
                                current_time=datetime.utcnow())
 
-    #         '''
-    #         Location GUID: {} \n
-    #         Start Date: {} \n
-    #         End Date: {} \n
-    #         Temperature: {} \n
-    #         Temperature Tolerance: {} \n
-    #         Humidity: {} \n
-    #         Humidity Tolerance: {} \n
-    #         Data: {}
-    #         '''.format(loc_guid, start_date, end_date, temperature, temp_tol, humidity, humid_tol, report_data.to_html())
-
     return render_template('report.html', form=form)
