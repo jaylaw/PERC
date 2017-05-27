@@ -3,9 +3,8 @@ from flask import render_template, redirect, url_for, request, flash
 from flask_login import login_required, login_user, logout_user
 from perc.main import main
 from perc.main.forms import LoginForm, ReportForm
-from perc import db
-from perc.models import User, Location, Reading
-import pandas as pd
+from perc.models import User
+from process import Report
 
 
 @main.errorhandler(404)
@@ -55,35 +54,23 @@ def report():
     form = ReportForm()
     form.pop_loc()
     if request.method == 'POST' and form.validate():
-        location = request.form['location']
-        start_date = request.form['start_date']
-        end_date = request.form['end_date']
-        temperature = request.form['temperature']
-        temp_tol = request.form['temp_tol']
-        humidity = request.form['humidity']
-        humid_tol = request.form['humid_tol']
-
-        locations = db.session.query(Location).all()
-        guids = [loc.location_guid for loc in locations]
-        names = [loc.location_name for loc in locations]
-
-        loc_guid = guids[int(location)]
-        loc_name = names[int(location)]
-
-        report_query = db.session.query(Reading).filter_by(location_guid=loc_guid). \
-            filter(Reading.time_stamp.between(start_date, end_date)).statement
-
-        report_data = pd.read_sql(report_query, db.engine)
+        s = Report(request.form['location'],
+                   request.form['temperature'],
+                   request.form['humidity'],
+                   request.form['temp_tol'],
+                   request.form['humid_tol'],
+                   request.form['start_date'],
+                   request.form['end_date'])
 
         return render_template('summary_report.html',
-                               loc_name=loc_name,
-                               start_date=start_date,
-                               end_date=end_date,
-                               temperature=temperature,
-                               temp_tol=temp_tol,
-                               humidity=humidity,
-                               humid_tol=humid_tol,
-                               report_data=report_data.to_html(),
+                               loc_name=s.get_location_name(),
+                               start_date=s.start_date,
+                               end_date=s.end_date,
+                               temperature=s.temperature,
+                               temp_tol=s.temperature_tolerance,
+                               humidity=s.humidity,
+                               humid_tol=s.humidity_tolerance,
+                               report_data=s.generate_summary(),
                                current_time=datetime.utcnow())
 
     return render_template('report.html', form=form)
