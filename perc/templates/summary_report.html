@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}PERC | Summary Report{% endblock %}
+
+{% block page_content %}
+
+    {% if current_user.is_authenticated %}
+
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span2">
+     <h1>Summary Report</h1>
+    <p>You are logged in as <b>{{ current_user.login_name }}</b>.</p>
+        <p>Location: {{ loc_name }}</p>
+        <p>Start Date: {{ start_date }}</p>
+        <p>End Date: {{ end_date }}</p>
+        <p>Temperature: {{ temperature }}</p>
+        <p>Temperature Tolerance: {{ temp_tol }}</p>
+        <p>Humidity: {{ humidity }}</p>
+        <p>Humidity Tolerance: {{ humid_tol }}</p>
+    </div>
+    <div class="span10">
+      <h1>RAW Report DataFrame</h1>
+        {{ report_data|safe }}
+        <p>Report generated {{ moment(current_time).fromNow(refresh=True) }}.
+    </div>
+  </div>
+</div>
+    {% else %}
+    <h1>Protected page</h1>
+    <p>This page can only be viewed by logged in users.</p>
+    <p> You are not currently logged in.</p>
+    <p>Local date and time: {{ moment(current_time).format('LLL') }}.</p>
+    {% endif %}
+
+
+{% endblock %}
