@@ -8,9 +8,9 @@
     {% if current_user.is_authenticated %}
 
 <div class="container-fluid">
-  <div class="row-fluid">
-    <div class="span2">
-     <h1>Summary Report</h1>
+  <div class="row">
+    <div class="col-lg-4 bg-info">
+     <h1>Report Criteria</h1>
     <p>You are logged in as <b>{{ current_user.login_name }}</b>.</p>
         <p>Location: {{ loc_name }}</p>
         <p>Start Date: {{ start_date }}</p>
@@ -20,9 +20,19 @@
         <p>Humidity: {{ humidity }}</p>
         <p>Humidity Tolerance: {{ humid_tol }}</p>
     </div>
-    <div class="span10">
-      <h1>RAW Report DataFrame</h1>
-        {{ report_data|safe }}
+    <div class="col-lg-2">
+
+    </div>
+    <div class="col-lg-6">
+      <h1>Report Details</h1>
+        <table class="table table-hover table-condensed table-striped table-bordered">
+          {% for key, value in report_data.items() %}
+            <tr>
+              <th> {{ key }} </th>
+              <td> {{ value[0] }} </td>
+            </tr>
+          {% endfor %}
+        </table>
         <p>Report generated {{ moment(current_time).fromNow(refresh=True) }}.
     </div>
   </div>

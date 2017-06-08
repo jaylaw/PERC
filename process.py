@@ -261,4 +261,6 @@ class Report:
         summary.loc[
             summary.LOCATION == self.get_location_name(), 'DUPE_RECORDS'] = 'TBA'
 
-        return summary.to_html()
+        report = summary.to_dict(orient='list')
+
+        return report

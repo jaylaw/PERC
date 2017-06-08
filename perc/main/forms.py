@@ -26,8 +26,8 @@ class ReportForm(FlaskForm):
                          validators=[DataRequired()])
     temperature = DecimalField('Temperature', validators=[DataRequired()], default=73.00)
     temp_tol = DecimalField('Temperature Tolerance', validators=[DataRequired()], default=6.00)
-    humidity = DecimalField('Humidity', validators=[DataRequired()], default=50.00)
-    humid_tol = DecimalField('Humidity Tolerance', validators=[DataRequired()], default=20.00)
+    humidity = DecimalField('Humidity', validators=[DataRequired()], default=35.00)
+    humid_tol = DecimalField('Humidity Tolerance', validators=[DataRequired()], default=15.00)
     submit = SubmitField()
 
     def pop_loc(self):
